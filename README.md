@@ -2,7 +2,7 @@
 First install the npm package:
 
 ```
-npm install Zetrix-connect-wallet-sdk
+npm install zetrix-connect-wallet-sdk
 ```
 
 > The syntax shown below is Javascript ES6, which needs to be translated to run in a Web browser
@@ -15,7 +15,7 @@ npm install Zetrix-connect-wallet-sdk
 ## 1. Initialize the SDK
 
 ```javascript
-import ZetrixWalletConnect from 'Zetrix-connect-wallet-sdk';
+import ZetrixWalletConnect from 'zetrix-connect-wallet-sdk';
 
 const options = {
   bridge: 'wss://test-wscw.Zetrix.com',
@@ -353,7 +353,7 @@ ZetrixWalletConnect.disconnect()
 
 
 
-With Zetrix-connect-wallet-sdk, the various capabilities of the Zetrix App can also be accessed and used in the webview environment.
+With zetrix-connect-wallet-sdk, the various capabilities of the Zetrix App can also be accessed and used in the webview environment.
 
 > The syntax shown below is Javascript ES6, which needs to be translated to run in a webview
 
@@ -362,7 +362,7 @@ With Zetrix-connect-wallet-sdk, the various capabilities of the Zetrix App can a
 ## 1. To initialize the webview SDK
 
 ```javascript
-import ZetrixWalletConnect from 'Zetrix-connect-wallet-sdk';
+import ZetrixWalletConnect from 'zetrix-connect-wallet-sdk';
 const ZetrixWalletConnect = new ZetrixWalletConnect()
 ```
 
