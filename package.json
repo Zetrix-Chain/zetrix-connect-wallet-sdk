@@ -1,6 +1,6 @@
 {
   "name": "zetrix-connect-wallet-sdk",
-  "version": "1.1.8",
+  "version": "1.1.9",
   "description": "A library for mobile wallet and non-Chrome browsers to connect with the Zetrix blockchain.",
   "main": "lib/index.js",
   "scripts": {
