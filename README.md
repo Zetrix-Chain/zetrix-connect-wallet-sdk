@@ -125,7 +125,7 @@ resp:
 
 Zetrix Wallet App can display and sign the content to be signed by calling this method. After signing, the user will return the app signature account public key, App signature account address, signature string, etc.
 
->  Note: When the SDK is used on the PC side, the initial parameter is set **qrcode:true** and authorization is granted, the MESSAGE signature SDK will automatically notify Zetrix Wallet app to perform the signature function
+>  Note: When the SDK is used on the PC side, the initial parameter is set with **qrcode:true**. After authorization is granted, the message signing will automatically notify Zetrix Wallet app to perform the signing function.
 
 ```javascript
 const obj = {
@@ -176,9 +176,64 @@ resp:
 | 1 | Cancel | Reject |
 | 10011 | Unauthorized | Reject |
 
+## 5. Authorize to connect and sign a message
+
+Zetrix Wallet app can support a 2 step process of connecting the wallet as well as signing a message (step 3 & 4 combined into one). The content to be signed will be displayed on the app and it will return the account's public key, account address, and the signed string.
+
+>  Note: When the SDK is used on the PC side, the initial parameter is set with **qrcode:true**. After authorization is granted, the message signing will automatically notify Zetrix Wallet app to perform the signing function.
+
+```javascript
+const obj = {
+    message: 'Hello world'
+}
+ZetrixWalletConnect.authAndSignMessage(obj).then(res => {
+    
+}).catch(error => {
+   
+})
+```
+
+**Request param:**
+
+| param | type | description |
+| --- | --- | --- |
+| message | String | Information to be signed provided by the service side |
+
+**Return Parameter Description:**
+
+| **param** | **type** | **description** |
+| --- | --- | --- |
+| code | Int | Status code |
+| data.address | String | App authorized account address |
+| data.publicKey | String | App signed the public key of the account |
+| data.signData | String | Signature string |
+| data.sessionId | String | Session ID |
+| message | String | Return messages |
+
+```json
+resp:
+
+{
+  code: 0,
+  data: {
+    address: 'ZTX3YgemDoX7JXkqsyeyprQVpoMJHkp5Qu8US',
+    publicKey: 'b001226ed6ee3bdae141e5e2686b2034fd7db1d3e4b562a3d315a14af71de6ab7c844ef786b6',
+    signData: '2ed1e99b92377fdf9ed8e7d55d7de322cd59d9df91d8e9c4a4f495931ad5d4da14b1c9258e2e0fdc33d77a48921b0a4acf46492cd171495deec30954ac2eef07',
+  },
+  message: ''
+}
+```
+
+**Status Code Description:**
+
+| **code** | **description** | **promise** |
+| --- | --- | --- |
+| 0 | Success | Resolve |
+| 1 | Cancel | Reject |
+| 10011 | Unauthorized | Reject |
 
 
-## 5. Blob signature
+## 6. Blob signature
 
 By calling this method, blob can be passed into the application side and signed by Zetrix Wallet App. After signing, the user will return the app signature account public key, App signature account address, signature string, etc.
 
@@ -237,7 +292,7 @@ message: ''
 
 
 
-## 6. Obtain account nonce value before transfer
+## 7. Obtain account nonce value before transfer
 
 The account Nonce value (account transaction serial number) needs to be obtained before the transfer, and the account continuity needs to be guaranteed, and the nonce value of the account needs to be added by 1 when the new transaction occurs
 
@@ -273,7 +328,7 @@ async getNonce () {
 
 
 
-## 7. Transaction
+## 8. Transaction
 
 This method can support transfer of ZTX, ZTP20 and other protocols and creation and invocation of smart contracts. This SDK is usually used for transactions on the Zetrix Wallet app chain, and developers need to assemble their own data structures from the following data templates before invoking the SDK. The confirmation page is for the App account to sign the transaction independently. After signing, the App will broadcast the transaction to the blockchain node, and the App will respond to the submission status. The final status of the transaction requires the developer to confirm the final state of the transaction by calling the transaction query interface after returning the hash value of the transaction.
 
@@ -337,7 +392,7 @@ resp:
 
 
 
-## 8. Cancel the authorization
+## 9. Cancel the authorization
 
 Call this method to cancel the authorization status between the application and the Zetrix Wallet app
 
