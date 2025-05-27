@@ -207,6 +207,7 @@ ZetrixWalletConnect.authAndSignMessage(obj).then(res => {
 | data.address | String | App authorized account address |
 | data.publicKey | String | App signed the public key of the account |
 | data.signData | String | Signature string |
+| data.sessionId | String | Session ID |
 | message | String | Return messages |
 
 ```json
