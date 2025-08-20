@@ -391,8 +391,60 @@ resp:
 | 1 | Cancel | Reject |
 
 
+## 9. Verify VC (verifyVC)
 
-## 9. Cancel the authorization
+This method requests the mobile wallet to verify a template (VC). The SDK will open the wallet (or delegate to the WebView) and wait for the mobile app response.
+
+```javascript
+const obj = {
+    templateId: 'TEMPLATE_ID'
+}
+ZetrixWalletConnect.verifyVC(obj).then(res => {
+    // res.data.status -> e.g. 'SUCCESS'
+}).catch(error => {
+    // handle cancel / failed / timeout
+})
+```
+
+**Request param:**
+
+| param | type | description |
+| --- | --- | --- |
+| templateId | String | The template (VC) identifier to verify on the wallet side |
+
+**Return Parameter Description:**
+
+| **param** | **type** | **description** |
+| --- | --- | --- |
+| code | Int | Status code |
+| data.status | String | Verification status returned by the wallet (e.g. 'SUCCESS', 'FAILED', 'CANCELLED') |
+| message | String | Return messages |
+
+```json
+resp:
+
+{
+  code: 0,
+  data: {
+    status: 'SUCCESS'
+  },
+  message: ''
+}
+```
+
+**Status Code Description:**
+
+| **code** | **description** | **promise** |
+| --- | --- | --- |
+| 0 | Success | Resolve |
+| 1 | Cancel / Rejected by user | Reject |
+| 10011 | Unauthorized | Reject |
+
+Note: the SDK will reject the promise when the wallet returns a FAILED or CANCELLED status. The WebView implementation mirrors the H5 flow; ensure `templateId` is provided.
+
+
+
+## 10. Cancel the authorization
 
 Call this method to cancel the authorization status between the application and the Zetrix Wallet app
 
