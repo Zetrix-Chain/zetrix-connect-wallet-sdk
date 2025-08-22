@@ -391,8 +391,82 @@ resp:
 | 1 | Cancel | Reject |
 
 
+## 9. Verify VC (verifyVC)
 
-## 9. Cancel the authorization
+This method requests the mobile wallet to verify a (VC). The SDK will open the wallet (or delegate to the WebView) and wait for the mobile app response.
+
+```javascript
+const obj = {
+    templateId: 'TEMPLATE_ID'
+}
+ZetrixWalletConnect.verifyVC(obj).then(res => {
+    // res.data.status -> e.g. 'true@false'
+    // res.data.details > e.g. 'Verification details'
+}).catch(error => {
+    // handle cancel / failed / timeout
+})
+```
+
+**Request param:**
+
+| param | type | description |
+| --- | --- | --- |
+| templateId | String | The template (VC) identifier to verify on the wallet side |
+
+**Return Parameter Description:**
+
+| **param** | **type** | **description** |
+| --- | --- | --- |
+| code | Int | Status code |
+| data.status | Boolean | Verification status returned by the wallet (e.g. true, false) |
+| data.details | Object | The full VC verification result (see below) |
+| message | String | Return messages |
+
+```json
+resp:
+
+{
+    "code": 0,
+    "data": {
+      "status": true,
+      "details": {
+        "errMsg": null,
+        "vcDetail": [
+          {
+            "id": "did:zid:69bd3c95f51fc2ca134fe67e6303e3e83633bbbdb14cf00400e87cd3388a8eeb",
+            "issuer": "did:zid:d545dc623b0562e9b02a0b4f280b32bd060c9ff1b3582290e6d760e3cc3bfd15",
+            "issuanceDate": "2025-07-02T00:00:00Z",
+            "expirationDate": "2035-07-02T00:00:00Z",
+            "credentialSubject": {
+              "passport": {
+                "name": "John Doe",
+                "nationality": "Myanmarese"
+              }
+            }
+          }
+        ],
+        "verified": true
+      }
+    }
+  }
+```
+
+**Status Code Description:**
+
+| **code** | **description** | **promise** |
+| --- | --- | --- |
+| 0 | Success | Resolve |
+| 1 | Cancel / Rejected by user | Reject |
+| 10011 | Unauthorized | Reject |
+
+Note: the SDK will reject the promise when the wallet returns a FAILED or CANCELLED status. The WebView implementation mirrors the H5 flow; ensure `templateId` is provided.
+
+**WebView:**
+The WebView implementation returns the same structure as the H5 flow. Always provide a valid `templateId`.
+
+
+
+## 10. Cancel the authorization
 
 Call this method to cancel the authorization status between the application and the Zetrix Wallet app
 
