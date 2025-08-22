@@ -393,7 +393,7 @@ resp:
 
 ## 9. Verify VC (verifyVC)
 
-This method requests the mobile wallet to verify a template (VC). The SDK will open the wallet (or delegate to the WebView) and wait for the mobile app response.
+This method requests the mobile wallet to verify a (VC). The SDK will open the wallet (or delegate to the WebView) and wait for the mobile app response.
 
 ```javascript
 const obj = {
