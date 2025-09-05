@@ -31,6 +31,7 @@ const ZetrixWalletConnect = new ZetrixWalletConnect(options)
 | bridge | String | Yes | Bridge service IP for communication between H5 JS and App |
 | qrcode | Boolean | No | Whether to enable the code scan authorization mode (it is recommended to configure this mode on the PC) |
 | callMode | String | Yes | If the passed in parameter 'web' is used in the web page. If the incoming parameter 'webView' is used in webView |
+| testnet | Boolean | Yes | Add this flag and set to `true` if you want to operate on the testnet, otherwise it will default to operating on mainnet |
 
 
 
