@@ -18,9 +18,11 @@ npm install zetrix-connect-wallet-sdk
 import ZetrixWalletConnect from 'zetrix-connect-wallet-sdk';
 
 const options = {
-  bridge: 'wss://test-wscw.Zetrix.com',
-  callMode: 'web'
-}
+  bridge: 'wss://test-wscw.zetrix.com',
+  callMode: 'web', // 'web' for browser pages; use 'webView' when inside Zetrix webview
+  qrcode: true, // recommended for PC so the SDK can generate a QR for scanning
+  appType: 'zetrix' // pixa OR myid OR muma
+};
 const ZetrixWalletConnect = new ZetrixWalletConnect(options)
 ```
 
@@ -31,7 +33,8 @@ const ZetrixWalletConnect = new ZetrixWalletConnect(options)
 | bridge | String | Yes | Bridge service IP for communication between H5 JS and App |
 | qrcode | Boolean | No | Whether to enable the code scan authorization mode (it is recommended to configure this mode on the PC) |
 | callMode | String | Yes | If the passed in parameter 'web' is used in the web page. If the incoming parameter 'webView' is used in webView |
-| testnet | Boolean | Yes | Add this flag and set to `true` if you want to operate on the testnet, otherwise it will default to operating on mainnet |
+| testnet | Boolean | No | Add this flag and set to `true` if you want to operate on the testnet, otherwise it will default to operating on mainnet |
+| appType | String | Yes | Choose between 'zetrix', 'pixa', 'myid', 'muma' depending on the application used |
 
 
 
