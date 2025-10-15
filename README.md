@@ -476,7 +476,8 @@ This method requests the mobile wallet to generate and return a Verifiable Prese
 
 ```javascript
 const obj = {
-    templateId: 'TEMPLATE_ID'
+    templateId: 'TEMPLATE_ID',
+    attributes: ['name', 'nationality', 'dateOfBirth']
 }
 ZetrixWalletConnect.getVP(obj).then(res => {
     // res.data.uuid -> the generated UUID string
@@ -491,6 +492,7 @@ ZetrixWalletConnect.getVP(obj).then(res => {
 | param | type | description |
 | --- | --- | --- |
 | templateId | String | The template identifier used to generate the VP UUID |
+| attributes | Array<String> | Array of attribute names to be included in the VP (e.g., ['name', 'nationality']) |
 
 **Return Parameter Description:**
 
@@ -518,12 +520,12 @@ resp:
 | 0 | Success | Resolve |
 | 1 | Cancel / Rejected by user | Reject |
 | 10011 | Unauthorized (not authenticated) | Reject |
-| -1 | Missing templateId or system error | Reject |
+| -1 | Missing templateId/attributes or system error | Reject |
 
-Note: the SDK will reject the promise if the user cancels, the session is not authenticated, or if `templateId` is not provided. The WebView implementation mirrors the H5 flow.
+Note: the SDK will reject the promise if the user cancels, the session is not authenticated, or if `templateId` or `attributes` is not provided. The `attributes` parameter must be an array of strings. The WebView implementation mirrors the H5 flow.
 
 **WebView:**
-The WebView implementation returns the same structure as the H5 flow. Always provide a valid `templateId`.
+The WebView implementation returns the same structure as the H5 flow. Always provide a valid `templateId` and `attributes` array.
 
 
 
