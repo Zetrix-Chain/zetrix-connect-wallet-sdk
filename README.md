@@ -470,7 +470,64 @@ The WebView implementation returns the same structure as the H5 flow. Always pro
 
 
 
-## 10. Cancel the authorization
+## 10. Get VP (getVP)
+
+This method requests the mobile wallet to generate and return a Verifiable Presentation (VP) UUID based on a template ID. The SDK will open the wallet (or delegate to the WebView) and wait for the mobile app to return the UUID.
+
+```javascript
+const obj = {
+    templateId: 'TEMPLATE_ID'
+}
+ZetrixWalletConnect.getVP(obj).then(res => {
+    // res.data.uuid -> the generated UUID string
+    console.log('UUID:', res.data.uuid);
+}).catch(error => {
+    // handle cancel / failed / timeout
+})
+```
+
+**Request param:**
+
+| param | type | description |
+| --- | --- | --- |
+| templateId | String | The template identifier used to generate the VP UUID |
+
+**Return Parameter Description:**
+
+| **param** | **type** | **description** |
+| --- | --- | --- |
+| code | Int | Status code |
+| data.uuid | String | The generated UUID for the Verifiable Presentation |
+| message | String | Return messages |
+
+```json
+resp:
+
+{
+    "code": 0,
+    "data": {
+      "uuid": "550e8400-e29b-41d4-a716-446655440000"
+    }
+}
+```
+
+**Status Code Description:**
+
+| **code** | **description** | **promise** |
+| --- | --- | --- |
+| 0 | Success | Resolve |
+| 1 | Cancel / Rejected by user | Reject |
+| 10011 | Unauthorized (not authenticated) | Reject |
+| -1 | Missing templateId or system error | Reject |
+
+Note: the SDK will reject the promise if the user cancels, the session is not authenticated, or if `templateId` is not provided. The WebView implementation mirrors the H5 flow.
+
+**WebView:**
+The WebView implementation returns the same structure as the H5 flow. Always provide a valid `templateId`.
+
+
+
+## 11. Cancel the authorization
 
 Call this method to cancel the authorization status between the application and the Zetrix Wallet app
 
