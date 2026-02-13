@@ -35,6 +35,8 @@ const ZetrixWalletConnect = new ZetrixWalletConnect(options)
 | callMode | String | Yes | If the passed in parameter 'web' is used in the web page. If the incoming parameter 'webView' is used in webView |
 | testnet | Boolean | No | Add this flag and set to `true` if you want to operate on the testnet, otherwise it will default to operating on mainnet |
 | appType | String | Yes | Choose between 'zetrix', 'pixa', 'myid', 'muma' depending on the application used |
+| customQrUi | Boolean | No | Enable custom QR UI mode - SDK will call your callback instead of displaying built-in QR (requires `qrcode: true` and `qrDataCallback`) |
+| qrDataCallback | Function | No | Callback function that receives QR content string when custom QR UI is enabled. Format: `(qrContent: string) => void` |
 
 
 
@@ -124,8 +126,89 @@ resp:
 | 1 | Cancel | Reject |
 
 
+## 4. Custom QR UI Mode
 
-## 4. The message signature
+The SDK supports custom QR UI mode, allowing you to display QR codes in your own custom interface instead of using the built-in QR display.
+
+**When to use:**
+- You need custom branding or styling for the QR code
+- You're using modern frameworks (React, Vue, Angular)
+- You want to display QR in modals, dialogs, or custom layouts
+- You need full control over QR code presentation
+
+**Example with React:**
+
+```javascript
+import React, { useState } from 'react';
+import QRCode from 'qrcode.react';
+import ZetrixWalletConnect from 'zetrix-connect-wallet-sdk';
+
+function App() {
+  const [qrData, setQRData] = useState(null);
+  const [authResult, setAuthResult] = useState(null);
+  
+  // Initialize SDK with custom QR callback
+  const sdk = new ZetrixWalletConnect({
+    bridge: 'wss://wscw.zetrix.com',
+    callMode: 'web',
+    qrcode: true,
+    customQrUi: true,  // Enable custom QR mode
+    qrDataCallback: (qrContent, closeCallback) => {
+      console.log('QR data received:', qrContent);
+      setQRData(qrContent);  // Display in your custom UI
+      // Store closeCallback if you need to programmatically close
+    },
+    appType: 'zetrix'
+  });
+  
+  const handleAuth = async () => {
+    try {
+      await sdk.connect();
+      const result = await sdk.auth();
+      setQRData(null);  // Close your custom QR UI when auth completes
+      setAuthResult(result);
+    } catch (error) {
+      console.error('Auth failed:', error);
+      setQRData(null);  // Close on error
+    }
+  };
+  
+  return (
+    <div>
+      <button onClick={handleAuth}>Authenticate</button>
+      
+      {/* Custom QR Modal */}
+      {qrData && (
+        <div className="qr-modal">
+          <h2>Scan QR Code with Wallet App</h2>
+          <QRCode value={qrData} size={300} />
+          <p>QR Content: {qrData}</p>
+          <button onClick={() => setQRData(null)}>Close</button>
+        </div>
+      )}
+      
+      {authResult && (
+        <div>
+          <p>Authenticated: {authResult.data.address}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+**Key Points:**
+- Set `customQrUi: true` and provide `qrDataCallback`
+- SDK calls your callback with two parameters:
+  1. `qrContent` (string): QR content in format `"{rms}&{sessionId}&{type}"`
+  2. `closeCallback` (function): Optional callback to programmatically signal closure
+- You are responsible for displaying and closing the QR UI
+- The SDK automatically closes when wallet responds (auth completes/rejects)
+- Works with all QR operations: `auth()`, `signMessage()`, `authAndSignMessage()`, etc.
+
+
+
+## 5. The message signature
 
 Zetrix Wallet App can display and sign the content to be signed by calling this method. After signing, the user will return the app signature account public key, App signature account address, signature string, etc.
 
@@ -180,7 +263,7 @@ resp:
 | 1 | Cancel | Reject |
 | 10011 | Unauthorized | Reject |
 
-## 5. Authorize to connect and sign a message
+## 6. Authorize to connect and sign a message
 
 Zetrix Wallet app can support a 2 step process of connecting the wallet as well as signing a message (step 3 & 4 combined into one). The content to be signed will be displayed on the app and it will return the account's public key, account address, and the signed string.
 
@@ -237,7 +320,7 @@ resp:
 | 10011 | Unauthorized | Reject |
 
 
-## 6. Blob signature
+## 7. Blob signature
 
 By calling this method, blob can be passed into the application side and signed by Zetrix Wallet App. After signing, the user will return the app signature account public key, App signature account address, signature string, etc.
 
@@ -296,7 +379,7 @@ message: ''
 
 
 
-## 7. Obtain account nonce value before transfer
+## 8. Obtain account nonce value before transfer
 
 The account Nonce value (account transaction serial number) needs to be obtained before the transfer, and the account continuity needs to be guaranteed, and the nonce value of the account needs to be added by 1 when the new transaction occurs
 
@@ -332,7 +415,7 @@ async getNonce () {
 
 
 
-## 8. Transaction
+## 9. Transaction
 
 This method can support transfer of ZTX, ZTP20 and other protocols and creation and invocation of smart contracts. This SDK is usually used for transactions on the Zetrix Wallet app chain, and developers need to assemble their own data structures from the following data templates before invoking the SDK. The confirmation page is for the App account to sign the transaction independently. After signing, the App will broadcast the transaction to the blockchain node, and the App will respond to the submission status. The final status of the transaction requires the developer to confirm the final state of the transaction by calling the transaction query interface after returning the hash value of the transaction.
 
@@ -395,7 +478,7 @@ resp:
 | 1 | Cancel | Reject |
 
 
-## 9. Verify VC (verifyVC)
+## 10. Verify VC (verifyVC)
 
 This method requests the mobile wallet to verify a (VC). The SDK will open the wallet (or delegate to the WebView) and wait for the mobile app response.
 
@@ -470,7 +553,7 @@ The WebView implementation returns the same structure as the H5 flow. Always pro
 
 
 
-## 10. Get VP (getVP)
+## 11. Get VP (getVP)
 
 This method requests the mobile wallet to generate and return a Verifiable Presentation (VP) UUID based on a template ID. The SDK will open the wallet (or delegate to the WebView) and wait for the mobile app to return the UUID.
 
@@ -529,7 +612,7 @@ The WebView implementation returns the same structure as the H5 flow. Always pro
 
 
 
-## 11. Cancel the authorization
+## 12. Cancel the authorization
 
 Call this method to cancel the authorization status between the application and the Zetrix Wallet app
 
