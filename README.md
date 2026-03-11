@@ -21,7 +21,7 @@ const options = {
   bridge: 'wss://test-wscw.zetrix.com',
   callMode: 'web', // 'web' for browser pages; use 'webView' when inside Zetrix webview
   qrcode: true, // recommended for PC so the SDK can generate a QR for scanning
-  appType: 'zetrix' // pixa OR myid OR muma
+  appType: 'zetrix' // zetrixwv3 OR pixa OR myid OR muma
 };
 const ZetrixWalletConnect = new ZetrixWalletConnect(options)
 ```
@@ -34,7 +34,7 @@ const ZetrixWalletConnect = new ZetrixWalletConnect(options)
 | qrcode | Boolean | No | Whether to enable the code scan authorization mode (it is recommended to configure this mode on the PC) |
 | callMode | String | Yes | If the passed in parameter 'web' is used in the web page. If the incoming parameter 'webView' is used in webView |
 | testnet | Boolean | No | Add this flag and set to `true` if you want to operate on the testnet, otherwise it will default to operating on mainnet |
-| appType | String | Yes | Choose between 'zetrix', 'pixa', 'myid', 'muma' depending on the application used |
+| appType | String | Yes | Choose between 'zetrix', 'zetrixwv3', 'pixa', 'myid', 'muma' depending on the application used |
 | customQrUi | Boolean | No | Enable custom QR UI mode - SDK will call your callback instead of displaying built-in QR (requires `qrcode: true` and `qrDataCallback`) |
 | qrDataCallback | Function | No | Callback function that receives QR content string when custom QR UI is enabled. Format: `(qrContent: string) => void` |
 
